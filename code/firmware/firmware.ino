@@ -41,7 +41,8 @@ void processJoystickData(String data) {
     Serial.println(lb);
     Serial.print("Right Bumper: ");
     Serial.println(rb);
-haha
+
+    return lt, rt, a, b, lb, rb;
     // Use the variables as needed in your code here
   }
 }
