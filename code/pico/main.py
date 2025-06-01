@@ -4,6 +4,7 @@ from microdot_websocket import with_websocket
 import json
 import network
 from machine import UART, Pin
+import sys
 
 # Load Wi-Fi credentials
 
@@ -18,7 +19,8 @@ print("Access point created. connect to:", wlan.ifconfig())
 # RX PIN 1
 
 # Set up UART (Pico GP0 -> Arduino RX)
-uart = UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1))
+uart0 = UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1))
+uart1 = UART(1, baudrate=9600, tx=Pin(4), rx=Pin(5))
 
 # Set up Microdot WebSocket app
 app = Microdot()
@@ -49,7 +51,11 @@ async def websocket_handler(request, ws):
                 # menu = data.get('menu', 0)
 
                 print(lt, rt, a, b, lb, rb)
-                uart.write(f"{lt},{rt},{a},{b},{lb},{rb}\n")
+                # uart0.write(f"{lt},{rt},{a},{b},{lb},{rb}\n")
+                # uart1.write(f"{lt},{rt},{a},{b},{lb},{rb}\n")
+
+                if (lt == 1 and rt == 1 and a == 1 and b == 1 and lb == 1 and rb == 1):
+                    sys.exit(0)
             except Exception as e:
                 print("JSON parse error:", e)
     except Exception as e:

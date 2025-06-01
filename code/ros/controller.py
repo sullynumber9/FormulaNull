@@ -14,10 +14,13 @@ if pygame.joystick.get_count() == 0:
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
-with open("credentials.json") as f:
-    config_data = json.load(f)
+# with open("credentials.json") as f:
+#     config_data = json.load(f)
 
-pico_ip = config_data["pico_ip"]
+# pico_ip = config_data["pico_ip"]
+
+pico_ip = "192.168.4.1"
+
 port = 8080
 PICO_WS_URL = f"ws://{pico_ip}:{port}/ws"  # Add /ws route
 
@@ -67,6 +70,6 @@ async def send_controller_input():
                 print("Send failed:", e)
                 break
 
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(0.1)
 
 asyncio.run(send_controller_input())
