@@ -6,8 +6,7 @@
 #define MAXINDEX 2
 #define MININDEX 0
 
-int pwm[3] = {50, 150, 255};
-int pwm_index = 1; // 1 is the default PWM speed
+int pwm = 255;
 bool active = true; // Flag to indicate if intended to be active
 
 int lt = 0;
@@ -22,15 +21,15 @@ void setup() {
   Serial.begin(9600);
   while (!Serial) { ; }  // Wait for Serial to initialize (optional)
   Serial.println("Ready to receive joystick data");
-  pinMode(3, OUTPUT);
-  pinMode(5, OUTPUT);
+  // pinMode(3, OUTPUT);
+  // pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(10, OUTPUT);
 
-  /*pinMode(A0, OUTPUT);
-  pinMode(A1, OUTPUT);
+  // pinMode(A0, OUTPUT);
+  // pinMode(A1, OUTPUT);
   pinMode(A2, OUTPUT);
-  pinMode(A3, OUTPUT);*/
+  pinMode(A3, OUTPUT);
 
   String inputLine = "";
 
@@ -60,12 +59,11 @@ void setup() {
         Serial.print(lb);
         Serial.print(" ");
         Serial.println(rb);
-        Serial.println(pwm_index);
 
 
         // Main logic goes here!
 
-        if (lt || lb || a || b) {
+        if (rt || rb || lt || lb || a || b) {
 
           // Check for estop condition
 
@@ -77,17 +75,17 @@ void setup() {
 
             // MoveLeft commands 
             moveLeft(lt, lb);
-            //moveRight(rt, rb);
+            moveRight(rt, rb);
 
             // Gearing commands
 
-            if(a) {
+            /*if(a) {
               gearDown();
             }
 
             if(b) {
               gearUp();
-            }
+            }*/
 
           }
 
@@ -98,16 +96,9 @@ void setup() {
         }
 
 
-
-        
-        
-
       } else {
         inputLine += received;
       }
-
-
-
 
     }
 
@@ -147,36 +138,36 @@ PWM PINS:
 
 
 void Brake() {
-  analogWrite(3, 255);
-  analogWrite(5, 255);
-  analogWrite(6, 255);
-  analogWrite(10, 255);
-  /*analogWrite(A0, 255);
-  analogWrite(A1, 255);
-  analogWrite(A2, 255);
-  analogWrite(A3, 255);*/
+  // digitalWrite(3, HIGH);
+  // digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  digitalWrite(10, HIGH);
+  // digitalWrite(A0, HIGH);
+  // digitalWrite(A1, HIGH);
+  digitalWrite(A2, HIGH);
+  digitalWrite(A3, HIGH);
 }
 
-/*void moveRight(int RT, int RB) {
+void moveRight(int RT, int RB) {
 
   if (RT^RB) {
-    analogWrite(3, pwm[pwm_index]*RT); // Set forwards
-    analogWrite(5, pwm[pwm_index]*RB); // Set backwards
-    analogWrite(6, pwm[pwm_index]*RT);
-    analogWrite(10, pwm[pwm_index]*RB);
+    // digitalWrite(3, RT); // Set forwards
+    // digitalWrite(5, RB); // Set backwards
+    digitalWrite(6, RT);
+    digitalWrite(10, RB);
   }
-}*/
+}
 
 void moveLeft(int LT, int LB) {
   if (LT^LB) {
-    analogWrite(3, pwm[pwm_index]*LT);
-    analogWrite(5, pwm[pwm_index]*LB);
-    analogWrite(6, pwm[pwm_index]*LT);
-    analogWrite(10, pwm[pwm_index]*LB);
+    // digitalWrite(A0, LT);
+    // digitalWrite(A1, LB);
+    digitalWrite(A2, LT);
+    digitalWrite(A3, LB);
   }
 }
 
-void gearUp() {
+/*void gearUp() {
 
   if (pwm_index < 2) {
     pwm_index++;
@@ -190,7 +181,7 @@ void gearDown() {
     pwm_index--;
   }
 
-}
+}*/
 
 void eStop() {
 
